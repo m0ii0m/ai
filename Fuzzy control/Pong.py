@@ -234,6 +234,8 @@ import numpy as np
 class FuzzyPlayer(Player):
     # mamdani or tsk
     method = "tsk"
+    # x_diff aimed at on impact: the outer quarter of the paddle is 30 < |x_diff| < 50
+    edge_offset = 40
 
     def __init__(self, racket: Racket, ball: Ball, board: Board):
         super(FuzzyPlayer, self).__init__(racket, ball, board)
@@ -326,6 +328,26 @@ class FuzzyPlayer(Player):
             if y_speed < 0 and y < self.racket.rect.height:
                 y_speed *= -1
         return ball.rect.centerx
+
+    def choose_target(self) -> int:
+        impact_x = self.predict_impact_x()
+        if self.ball.y_speed < 0:
+            # the opponent may change the ball speed
+            return impact_x
+
+        # the paddle centre must stay on the board
+        half = self.racket.rect.width // 2
+        width = self.board.surface.get_width()
+        candidates = [
+            x
+            for x in (impact_x - self.edge_offset, impact_x + self.edge_offset)
+            if half <= x <= width - half
+        ]
+        if not candidates:
+            # a fast ball can overshoot a side wall for one frame
+            return max(half, min(impact_x, width - half))
+        # pick the edge that needs the shortest move
+        return min(candidates, key=lambda x: abs(x - self.racket.rect.centerx))
 
     def act(self, x_diff: int, y_diff: int):
         velocity = self.make_decision(x_diff, y_diff)
