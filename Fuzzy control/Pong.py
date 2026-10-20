@@ -227,16 +227,21 @@ class HumanPlayer(Player):
 # DO NOT MODIFY CODE ABOVE THIS LINE
 # ----------------------------------
 
-# import numpy as np
+import numpy as np
 # import matplotlib.pyplot as plt
 
 
 class FuzzyPlayer(Player):
     def __init__(self, racket: Racket, ball: Ball, board: Board):
         super(FuzzyPlayer, self).__init__(racket, ball, board)
+        width = board.surface.get_width()
+        height = board.surface.get_height()
+
         # for Mamdami:
-        # x_dist = fuzz.control.Antecedent...
-        # y_dist = fuzz.control.Antecedent...
+        # x_diff = racket - ball: positive when the ball is on the left of the paddle
+        x_dist = fuzzcontrol.Antecedent(np.arange(-width, width + 1, 1), "x_dist")
+        # y_diff is never negative for the bottom paddle
+        y_dist = fuzzcontrol.Antecedent(np.arange(0, height + 1, 1), "y_dist")
         # velocity = fuzz.control.Consequent...
         # self.racket_controller = fuzz.control.ControlSystem...
 
