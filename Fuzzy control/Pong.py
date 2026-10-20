@@ -232,7 +232,7 @@ import numpy as np
 
 
 class FuzzyPlayer(Player):
-    # mamdani or tsk
+    # mamdani, tsk or edge
     method = "tsk"
     # x_diff aimed at on impact: the outer quarter of the paddle is 30 < |x_diff| < 50
     edge_offset = 40
@@ -304,6 +304,10 @@ class FuzzyPlayer(Player):
             "slow_right": lambda x_diff, y_diff: -0.15 * x_diff,
             "fast_right": lambda x_diff, y_diff: -0.25 * x_diff,
         }
+        self.edge_velocity_fx = {
+            **self.velocity_fx,
+            "stop": lambda x_diff, y_diff: -1.0 * x_diff,
+        }
 
         # visualize TSK
         # plt.figure()
@@ -350,6 +354,9 @@ class FuzzyPlayer(Player):
         return min(candidates, key=lambda x: abs(x - self.racket.rect.centerx))
 
     def act(self, x_diff: int, y_diff: int):
+        if self.method == "edge":
+            # steer towards the chosen target instead of the ball itself
+            x_diff = self.racket.rect.centerx - self.choose_target()
         velocity = self.make_decision(x_diff, y_diff)
         self.move(self.racket.rect.x + velocity)
 
@@ -384,11 +391,12 @@ class FuzzyPlayer(Player):
             "fast_right": min(x_vals["right"], y_vals["near"]),
         }
 
+        velocity_fx = self.edge_velocity_fx if self.method == "edge" else self.velocity_fx
         total = sum(activations[val] for val in activations)
         if total == 0:
             return 0.0
         velocity = sum(
-            activations[val] * self.velocity_fx[val](x_diff, y_diff)
+            activations[val] * velocity_fx[val](x_diff, y_diff)
             for val in activations
         ) / total
 
