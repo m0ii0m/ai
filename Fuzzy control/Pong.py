@@ -246,6 +246,15 @@ class FuzzyPlayer(Player):
         velocity = fuzzcontrol.Consequent(
             np.arange(-racket.max_speed, racket.max_speed + 0.01, 0.01), "velocity"
         )
+
+        # shoulders run past the universe so every input fires at least one term
+        x_dist["right"] = fuzz.trapmf(x_dist.universe, [-width - 100, -width, -35, -5])
+        x_dist["centre"] = fuzz.trimf(x_dist.universe, [-30, 0, 30])
+        x_dist["left"] = fuzz.trapmf(x_dist.universe, [5, 35, width, width + 100])
+
+        y_dist["near"] = fuzz.trapmf(y_dist.universe, [-1, 0, 100, 250])
+        y_dist["far"] = fuzz.trapmf(y_dist.universe, [100, 250, height, height + 1])
+
         # self.racket_controller = fuzz.control.ControlSystem...
 
         # visualize Mamdami
