@@ -279,17 +279,18 @@ class FuzzyPlayer(Player):
         # ...
 
         # for TSK:
-        # self.x_universe = np.arange...
-        # self.x_mf = {
-        #     "far_left": fuzz.trapmf(
-        #         self.x_universe,
-        #         [
-        #             ...
-        #         ],
-        #     ),
-        #     ...
-        # }
-        # ...
+        # same universes and shapes as Mamdani, so both controllers can be compared
+        self.x_universe = np.arange(-width, width + 1, 1)
+        self.x_mf = {
+            "right": fuzz.trapmf(self.x_universe, [-width - 100, -width, -35, -5]),
+            "centre": fuzz.trimf(self.x_universe, [-30, 0, 30]),
+            "left": fuzz.trapmf(self.x_universe, [5, 35, width, width + 100]),
+        }
+        self.y_universe = np.arange(0, height + 1, 1)
+        self.y_mf = {
+            "near": fuzz.trapmf(self.y_universe, [-1, 0, 100, 250]),
+            "far": fuzz.trapmf(self.y_universe, [100, 250, height, height + 1]),
+        }
         # self.velocity_fx = {
         #     "f_slow_left": lambda x_diff, y_diff: -1 * (abs(x_diff) + y_diff),
         #     ...
