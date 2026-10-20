@@ -320,21 +320,27 @@ class FuzzyPlayer(Player):
         velocity = self.racket_controller.output["velocity"]
 
         # for TSK:
-        # x_vals = {
-        #     name: fuzz.interp_membership(self.x_universe, mf, x_diff)
-        #     for name, mf in self.x_mf.items()
-        # }
-        # ...
+        x_vals = {
+            name: fuzz.interp_membership(self.x_universe, mf, x_diff)
+            for name, mf in self.x_mf.items()
+        }
+        y_vals = {
+            name: fuzz.interp_membership(self.y_universe, mf, y_diff)
+            for name, mf in self.y_mf.items()
+        }
         # rule activations with Zadeh norms
-        # activations = {
-        #     "f_slow_left": max(
-        #         [
-        #             min(x_vals...),
-        #             min(x_vals...),
-        #         ]
-        #     ),
-        #     ...
-        # }
+        activations = {
+            "fast_left": min(x_vals["left"], y_vals["near"]),
+            "slow_left": min(x_vals["left"], y_vals["far"]),
+            "stop": max(
+                [
+                    min(x_vals["centre"], y_vals["near"]),
+                    min(x_vals["centre"], y_vals["far"]),
+                ]
+            ),
+            "slow_right": min(x_vals["right"], y_vals["far"]),
+            "fast_right": min(x_vals["right"], y_vals["near"]),
+        }
 
         # velocity = sum(
         #     activations[val] * self.velocity_fx[val](x_diff, y_diff)
