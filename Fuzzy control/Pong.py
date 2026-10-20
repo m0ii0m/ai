@@ -311,6 +311,22 @@ class FuzzyPlayer(Player):
         # plt.show()
         # ...
 
+    def predict_impact_x(self) -> int:
+        ball = self.ball
+        x, y = ball.rect.x, ball.rect.y
+        x_speed, y_speed = ball.x_speed, ball.y_speed
+        right_wall = self.board.surface.get_width() - ball.rect.width
+        for _ in range(1000):
+            x += round(x_speed)
+            y += round(y_speed)
+            if x < 0 or x > right_wall:
+                x_speed *= -1
+            if y_speed > 0 and y + ball.rect.height > self.racket.rect.top:
+                return x + ball.rect.width // 2
+            if y_speed < 0 and y < self.racket.rect.height:
+                y_speed *= -1
+        return ball.rect.centerx
+
     def act(self, x_diff: int, y_diff: int):
         velocity = self.make_decision(x_diff, y_diff)
         self.move(self.racket.rect.x + velocity)
