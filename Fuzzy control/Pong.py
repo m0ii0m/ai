@@ -242,7 +242,10 @@ class FuzzyPlayer(Player):
         x_dist = fuzzcontrol.Antecedent(np.arange(-width, width + 1, 1), "x_dist")
         # y_diff is never negative for the bottom paddle
         y_dist = fuzzcontrol.Antecedent(np.arange(0, height + 1, 1), "y_dist")
-        # velocity = fuzz.control.Consequent...
+        # paddle speed in px/frame, negative = move left (Racket.max_speed = 10)
+        velocity = fuzzcontrol.Consequent(
+            np.arange(-racket.max_speed, racket.max_speed + 0.01, 0.01), "velocity"
+        )
         # self.racket_controller = fuzz.control.ControlSystem...
 
         # visualize Mamdami
