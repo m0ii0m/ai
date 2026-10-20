@@ -270,7 +270,9 @@ class FuzzyPlayer(Player):
             fuzzcontrol.Rule(x_dist["right"] & y_dist["far"], velocity["slow_right"]),
         ]
 
-        # self.racket_controller = fuzz.control.ControlSystem...
+        self.racket_controller = fuzzcontrol.ControlSystemSimulation(
+            fuzzcontrol.ControlSystem(rules)
+        )
 
         # visualize Mamdami
         # x_dist.view()
@@ -307,8 +309,10 @@ class FuzzyPlayer(Player):
 
     def make_decision(self, x_diff: int, y_diff: int):
         # for Mamdami:
-        # self.racket_controller.compute()
-        # velocity = self.racket_controller.o..
+        self.racket_controller.input["x_dist"] = x_diff
+        self.racket_controller.input["y_dist"] = y_diff
+        self.racket_controller.compute()
+        velocity = self.racket_controller.output["velocity"]
 
         # for TSK:
         # x_vals = {
@@ -332,10 +336,10 @@ class FuzzyPlayer(Player):
         #     for val in activations
         # ) / sum(activations[val] for val in activations)
 
-        return 0
+        return velocity
 
 
 if __name__ == "__main__":
-    game = PongGame(800, 400, NaiveOponent, HumanPlayer)
-    # game = PongGame(800, 400, NaiveOponent, FuzzyPlayer)
+    # game = PongGame(800, 400, NaiveOponent, HumanPlayer)
+    game = PongGame(800, 400, NaiveOponent, FuzzyPlayer)
     game.run()
