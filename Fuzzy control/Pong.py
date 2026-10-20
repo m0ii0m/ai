@@ -232,6 +232,9 @@ import numpy as np
 
 
 class FuzzyPlayer(Player):
+    # mamdani or tsk
+    method = "tsk"
+
     def __init__(self, racket: Racket, ball: Ball, board: Board):
         super(FuzzyPlayer, self).__init__(racket, ball, board)
         width = board.surface.get_width()
@@ -314,10 +317,11 @@ class FuzzyPlayer(Player):
 
     def make_decision(self, x_diff: int, y_diff: int):
         # for Mamdami:
-        self.racket_controller.input["x_dist"] = x_diff
-        self.racket_controller.input["y_dist"] = y_diff
-        self.racket_controller.compute()
-        velocity = self.racket_controller.output["velocity"]
+        if self.method == "mamdani":
+            self.racket_controller.input["x_dist"] = x_diff
+            self.racket_controller.input["y_dist"] = y_diff
+            self.racket_controller.compute()
+            return self.racket_controller.output["velocity"]
 
         # for TSK:
         x_vals = {
@@ -342,12 +346,17 @@ class FuzzyPlayer(Player):
             "fast_right": min(x_vals["right"], y_vals["near"]),
         }
 
-        # velocity = sum(
-        #     activations[val] * self.velocity_fx[val](x_diff, y_diff)
-        #     for val in activations
-        # ) / sum(activations[val] for val in activations)
+        total = sum(activations[val] for val in activations)
+        if total == 0:
+            return 0.0
+        velocity = sum(
+            activations[val] * self.velocity_fx[val](x_diff, y_diff)
+            for val in activations
+        ) / total
 
-        return velocity
+        # the linear consequents are unbounded
+        max_speed = self.racket.max_speed
+        return float(np.clip(velocity, -max_speed, max_speed))
 
 
 if __name__ == "__main__":
