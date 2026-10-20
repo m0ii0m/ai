@@ -261,6 +261,15 @@ class FuzzyPlayer(Player):
         velocity["slow_right"] = fuzz.trimf(velocity.universe, [2, 5.5, 9])
         velocity["fast_right"] = fuzz.trapmf(velocity.universe, [7, 9, 10, 11])
 
+        rules = [
+            fuzzcontrol.Rule(x_dist["left"] & y_dist["near"], velocity["fast_left"]),
+            fuzzcontrol.Rule(x_dist["left"] & y_dist["far"], velocity["slow_left"]),
+            fuzzcontrol.Rule(x_dist["centre"] & y_dist["near"], velocity["stop"]),
+            fuzzcontrol.Rule(x_dist["centre"] & y_dist["far"], velocity["stop"]),
+            fuzzcontrol.Rule(x_dist["right"] & y_dist["near"], velocity["fast_right"]),
+            fuzzcontrol.Rule(x_dist["right"] & y_dist["far"], velocity["slow_right"]),
+        ]
+
         # self.racket_controller = fuzz.control.ControlSystem...
 
         # visualize Mamdami
