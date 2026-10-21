@@ -1,0 +1,121 @@
+{
+  "mamdani": {
+    "points": [
+      [
+        68.4,
+        "opponent",
+        10.36
+      ],
+      [
+        119.8,
+        "player",
+        8.56
+      ],
+      [
+        171.2,
+        "player",
+        8.56
+      ],
+      [
+        222.6,
+        "player",
+        8.56
+      ],
+      [
+        274.0,
+        "player",
+        8.56
+      ]
+    ],
+    "edge_hits": {
+      "player": 1,
+      "opponent": 60
+    }
+  },
+  "tsk": {
+    "points": [
+      [
+        67.9,
+        "opponent",
+        10.36
+      ],
+      [
+        121.7,
+        "player",
+        10.36
+      ],
+      [
+        175.6,
+        "player",
+        10.36
+      ],
+      [
+        229.5,
+        "player",
+        10.36
+      ],
+      [
+        283.3,
+        "player",
+        10.36
+      ]
+    ],
+    "edge_hits": {
+      "player": 6,
+      "opponent": 62
+    }
+  },
+  "edge": {
+    "points": [
+      [
+        33.0,
+        "opponent",
+        11.39
+      ],
+      [
+        65.9,
+        "opponent",
+        12.53
+      ],
+      [
+        98.7,
+        "opponent",
+        12.53
+      ],
+      [
+        131.6,
+        "opponent",
+        12.53
+      ],
+      [
+        164.5,
+        "opponent",
+        12.53
+      ],
+      [
+        197.3,
+        "opponent",
+        12.53
+      ],
+      [
+        230.2,
+        "opponent",
+        12.53
+      ],
+      [
+        263.1,
+        "opponent",
+        12.53
+      ],
+      [
+        295.9,
+        "opponent",
+        12.53
+      ]
+    ],
+    "edge_hits": {
+      "player": 72,
+      "opponent": 63
+    }
+  }
+}

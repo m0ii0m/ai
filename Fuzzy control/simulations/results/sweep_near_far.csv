@@ -1,0 +1,6 @@
+near_end/far_full,rallies,first_pass_player,first_pass_opponent,unfinished,player_losses,opponent_losses,player_loss_rate,speed_at_player_loss_mean,speed_at_player_loss_min,speed_at_opponent_loss_mean,rally_seconds_mean,player_returns,player_edge_hit_rate
+25/75,200,0,34,0,142,24,0.855,9.4,8.5,10.56,26.91,1005,0.318
+50/150,200,0,34,0,106,60,0.639,9.94,9.5,10.34,30.31,1215,0.23
+100/250,200,0,34,0,98,68,0.59,9.92,9.5,10.48,30.46,1229,0.234
+150/350,200,0,34,0,98,68,0.59,10.02,9.5,10.49,30.69,1245,0.237
+250/400,200,0,34,0,95,71,0.572,10.24,9.51,10.51,31.17,1281,0.244

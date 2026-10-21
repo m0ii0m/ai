@@ -1,0 +1,29 @@
+{
+  "python": "3.14.8",
+  "packages": {
+    "pygame": "2.6.1",
+    "scikit-fuzzy": "0.5.0",
+    "numpy": "2.3.5",
+    "scipy": "1.18.1",
+    "networkx": "3.7"
+  },
+  "fps": 30,
+  "board": [
+    800,
+    400
+  ],
+  "rallies_per_setting": 200,
+  "seed": 0,
+  "defaults": {
+    "edge_offset": 40,
+    "gains": [
+      0.25,
+      0.15
+    ],
+    "edge_stop_gain": 1.0,
+    "near_far": [
+      100,
+      250
+    ]
+  }
+}
