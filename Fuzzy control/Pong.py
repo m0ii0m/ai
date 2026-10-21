@@ -5,7 +5,7 @@ from typing import Type
 import skfuzzy as fuzz
 import skfuzzy.control as fuzzcontrol
 
-FPS = 30
+FPS = 60
 
 
 class Board:
@@ -233,7 +233,7 @@ import numpy as np
 
 class FuzzyPlayer(Player):
     # mamdani, tsk or edge
-    method = "tsk"
+    method = "edge"
     # x_diff aimed at on impact: the outer quarter of the paddle is 30 < |x_diff| < 50
     edge_offset = 40
 
