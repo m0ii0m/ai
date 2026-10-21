@@ -5,7 +5,7 @@ from typing import Type
 import skfuzzy as fuzz
 import skfuzzy.control as fuzzcontrol
 
-FPS = 60
+FPS = 30
 
 
 class Board:
@@ -228,14 +228,16 @@ class HumanPlayer(Player):
 # ----------------------------------
 
 import numpy as np
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 
 class FuzzyPlayer(Player):
     # mamdani, tsk or edge
-    method = "edge"
-    # x_diff aimed at on impact: the outer quarter of the paddle is 30 < |x_diff| < 50
+    method = "tsk"
+    # 30 < |x_diff| < 50
     edge_offset = 40
+    # plot the fuzzy sets before the game starts
+    show_plots = False
 
     def __init__(self, racket: Racket, ball: Ball, board: Board):
         super(FuzzyPlayer, self).__init__(racket, ball, board)
@@ -252,7 +254,6 @@ class FuzzyPlayer(Player):
             np.arange(-racket.max_speed, racket.max_speed + 0.01, 0.01), "velocity"
         )
 
-        # shoulders run past the universe so every input fires at least one term
         x_dist["right"] = fuzz.trapmf(x_dist.universe, [-width - 100, -width, -35, -5])
         x_dist["centre"] = fuzz.trimf(x_dist.universe, [-30, 0, 30])
         x_dist["left"] = fuzz.trapmf(x_dist.universe, [5, 35, width, width + 100])
@@ -280,8 +281,10 @@ class FuzzyPlayer(Player):
         )
 
         # visualize Mamdami
-        # x_dist.view()
-        # ...
+        if self.show_plots:
+            x_dist.view()
+            y_dist.view()
+            velocity.view()
 
         # for TSK:
         # same universes and shapes as Mamdani
@@ -310,12 +313,31 @@ class FuzzyPlayer(Player):
         }
 
         # visualize TSK
-        # plt.figure()
-        # for name, mf in self.x_mf.items():
-        #     plt.plot(self.x_universe, mf, label=name)
-        # plt.legend()
-        # plt.show()
-        # ...
+        if self.show_plots:
+            _, (ax_x, ax_y, ax_v) = plt.subplots(1, 3, figsize=(15, 4))
+            for name, mf in self.x_mf.items():
+                ax_x.plot(self.x_universe, mf, label=name)
+            ax_x.set_title("x_dist")
+            ax_x.legend()
+            for name, mf in self.y_mf.items():
+                ax_y.plot(self.y_universe, mf, label=name)
+            ax_y.set_title("y_dist")
+            ax_y.legend()
+            x_diff = np.arange(-60, 61)
+            consequents = {
+                "fast (k = 0.25)": self.velocity_fx["fast_left"],
+                "slow (k = 0.15)": self.velocity_fx["slow_left"],
+                "stop (k = 0)": self.velocity_fx["stop"],
+                "edge stop (k = 1)": self.edge_velocity_fx["stop"],
+            }
+            for name, fx in consequents.items():
+                ax_v.plot(x_diff, [fx(x, 0) for x in x_diff], label=name)
+            ax_v.axhline(racket.max_speed, color="gray", ls=":", label="speed limit")
+            ax_v.axhline(-racket.max_speed, color="gray", ls=":")
+            ax_v.set_ylim(-15, 15)
+            ax_v.set_title("TSK consequents")
+            ax_v.legend()
+            plt.show()
 
     def predict_impact_x(self) -> int:
         ball = self.ball

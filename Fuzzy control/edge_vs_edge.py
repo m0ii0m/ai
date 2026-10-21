@@ -5,7 +5,7 @@ import pygame
 from Pong import Ball, FuzzyPlayer, PongGame
 
 PADDLE_MAX_SPEED = float("inf")
-BALL_MAX_SPEED = 20
+BALL_MAX_SPEED = 30
 
 
 class BottomEdgePlayer(FuzzyPlayer):
