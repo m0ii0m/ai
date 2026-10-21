@@ -233,7 +233,7 @@ import matplotlib.pyplot as plt
 
 class FuzzyPlayer(Player):
     # mamdani, tsk or edge
-    method = "tsk"
+    method = "edge"
     # 30 < |x_diff| < 50
     edge_offset = 40
     # plot the fuzzy sets before the game starts
