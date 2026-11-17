@@ -102,6 +102,12 @@ def depthFirstSearch(problem: SearchProblem):
         if(problem.isGoalState(state)):
             return actions
 
+        successors = problem.getSuccessors(state)
+        for nextState, action, cost in successors:
+            if(nextState in visited):
+                continue
+            frontier.push((nextState, actions + [action]))
+
     return []
 
 def breadthFirstSearch(problem: SearchProblem):
