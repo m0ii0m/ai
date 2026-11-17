@@ -91,6 +91,17 @@ def depthFirstSearch(problem: SearchProblem):
     frontier.push((problem.getStartState(), []))
     visited = set()
 
+    while not frontier.isEmpty():
+        state, actions = frontier.pop()
+
+        if(state in visited):
+            continue
+
+        visited.add(state)
+
+        if(problem.isGoalState(state)):
+            return actions
+
     return []
 
 def breadthFirstSearch(problem: SearchProblem):
